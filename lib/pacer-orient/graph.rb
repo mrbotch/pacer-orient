@@ -324,9 +324,12 @@ module Pacer
         if search_manual_indices
           super
         else
+          label = filters.properties.select{|p| p[0] == 'label'}[0].try(:[], 1) # bit of a hack here to get the 'label' key
+          filters.remove_property_keys ['label'] if label
+
           filters.graph = self
           filters.use_lookup!
-          query = build_query(orient_type(nil, element_type), filters)
+          query = build_query(orient_type(label, element_type), filters)
           if query
             route = sql query[0], query[1], element_type: element_type, extensions: filters.extensions, wrapper: filters.wrapper
             indexed = query.pop

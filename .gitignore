@@ -6,3 +6,4 @@ target/*
 lib/*.jar
 Gemfile-custom
 Jarfile.lock
+.idea
