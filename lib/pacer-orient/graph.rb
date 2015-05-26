@@ -316,7 +316,11 @@ module Pacer
           end.compact.join(" AND ")
           ["SELECT FROM #{orient_type.name} WHERE #{conds}", params, indexed]
         else
-          nil
+          if orient_type
+            ["SELECT FROM #{orient_type.name}", nil, []]
+          else
+            nil
+          end
         end
       end
 
