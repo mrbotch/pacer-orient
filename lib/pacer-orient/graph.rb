@@ -320,11 +320,20 @@ module Pacer
         end
       end
 
+      # TODO: hack to get property label from filters, need to reconcile this properly with Pacer's vertex label support
+      def get_label_from_filters(filters)
+        props = filters.properties
+        return nil if props.empty?
+
+        idx = props.index{|p| p[0] == 'label'}
+        props[idx] if idx
+      end
+
       def indexed_route(element_type, filters, block)
         if search_manual_indices
           super
         else
-          label = filters.properties.select{|p| p[0] == 'label'}[0].try(:[], 1) # bit of a hack here to get the 'label' key
+          label = get_label_from_filters(filters)
           filters.remove_property_keys ['label'] if label
 
           filters.graph = self
