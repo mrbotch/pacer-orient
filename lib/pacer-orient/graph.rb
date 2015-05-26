@@ -325,8 +325,9 @@ module Pacer
         props = filters.properties
         return nil if props.empty?
 
+        # filters.properties = [['label','Person'],['name','ilya']]
         idx = props.index{|p| p[0] == 'label'}
-        props[idx] if idx
+        props[idx][1] if idx
       end
 
       def indexed_route(element_type, filters, block)
@@ -338,7 +339,11 @@ module Pacer
 
           filters.graph = self
           filters.use_lookup!
-          query = build_query(orient_type(label, element_type), filters)
+
+          type = orient_type(label, element_type)
+          raise "Vertex class named '#{label}' not registered with OrientDB" if type.nil?
+
+          query = build_query(type, filters)
           if query
             route = sql query[0], query[1], element_type: element_type, extensions: filters.extensions, wrapper: filters.wrapper
             indexed = query.pop
