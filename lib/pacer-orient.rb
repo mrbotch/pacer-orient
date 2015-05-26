@@ -10,7 +10,7 @@ LockJar.lock File.join(File.dirname(__FILE__), '../Jarfile'), lockfile: 'Jarfile
 LockJar.load 'Jarfile.pacer-orient.lock'
 
 # Orient will kill you at the drop of a hat if you don't do this!
-com.orientechnologies.orient.core.Orient.instance.removeShutdownHook
+#com.orientechnologies.orient.core.Orient.instance.removeShutdownHook
 
 require 'pacer-orient/graph'
 require 'pacer-orient/tx_data_wrapper'
@@ -55,7 +55,7 @@ module Pacer
     def orient(url = nil, args = nil)
       if url.is_a? Pacer::Graph
         # Don't register the new graph so that it won't be automatically closed.
-        Orient::Graph.new Pacer::Orient::Encoder, proc { url }
+        Orient::Graph.new Pacer::Orient::BinaryDateEncoder, proc { url }
       else
         open = proc do
           orient_factory(url, args).get
@@ -64,7 +64,7 @@ module Pacer
           factory = Pacer.open_graphs.delete url
           factory.shutdown if factory
         end
-        Orient::Graph.new(Pacer::Orient::Encoder, open, shutdown)
+        Orient::Graph.new(Pacer::Orient::BinaryDateEncoder, open, shutdown)
       end
     end
 
