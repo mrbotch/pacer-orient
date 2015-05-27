@@ -10,7 +10,8 @@ LockJar.lock File.join(File.dirname(__FILE__), '../Jarfile'), lockfile: 'Jarfile
 LockJar.load 'Jarfile.pacer-orient.lock'
 
 # Orient will kill you at the drop of a hat if you don't do this!
-#com.orientechnologies.orient.core.Orient.instance.removeShutdownHook
+# - more specifically will replace any other shutdown hooks (like rspec's)
+com.orientechnologies.orient.core.Orient.instance.removeShutdownHook
 
 require 'pacer-orient/graph'
 require 'pacer-orient/tx_data_wrapper'
