@@ -56,7 +56,7 @@ module Pacer
     def orient(url = nil, args = nil)
       if url.is_a? Pacer::Graph
         # Don't register the new graph so that it won't be automatically closed.
-        Orient::Graph.new Pacer::Orient::BinaryDateEncoder, proc { url }
+        Orient::Graph.new Pacer::Orient::Encoder, proc { url }
       else
         open = proc do
           orient_factory(url, args).get
@@ -65,7 +65,7 @@ module Pacer
           factory = Pacer.open_graphs.delete url
           factory.shutdown if factory
         end
-        Orient::Graph.new(Pacer::Orient::BinaryDateEncoder, open, shutdown)
+        Orient::Graph.new(Pacer::Orient::Encoder, open, shutdown)
       end
     end
 
