@@ -15,6 +15,8 @@ module Pacer::Orient
         value = value.strip
         value = nil if value == ''
         value
+      when Symbol
+        value.to_s # unfortunately need to convert symbols to strings in order to compare
       when Numeric
         if value.is_a? Bignum
           Marshal.dump(value).to_java_bytes
@@ -26,12 +28,11 @@ module Pacer::Orient
       when JavaDate
         value
       when Time
-        value
+        value.utc
       when DateTime
-        value.to_time
+        value.to_time.utc
       when Date
-        t = value.to_time
-        (t + Time.zone_offset(t.zone))
+        value.to_time.utc
       when Set
         value.map { |x| encode_property(x) }.to_hashset
       when Hash
