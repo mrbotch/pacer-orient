@@ -32,7 +32,7 @@ module Pacer::Orient
       when DateTime
         value.to_time.utc
       when Date
-        value.to_time.utc
+        value.to_time(:utc) # to start of day in UTC
       when Set
         value.map { |x| encode_property(x) }.to_hashset
       when Hash
